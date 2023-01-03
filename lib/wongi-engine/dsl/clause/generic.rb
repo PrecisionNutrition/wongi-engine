@@ -4,8 +4,9 @@ module Wongi::Engine
 
       attr_accessor :name, :action, :rule
 
-      def initialize *args, &block
+      def initialize *args, **opts, &block
         @args = args
+        @opts = opts
         @block = block
       end
 
@@ -13,7 +14,7 @@ module Wongi::Engine
         if action.respond_to? :call
           self
         else
-          action.new( *@args, &@block ).tap do |a|
+          action.new(*@args, **@opts, &@block ).tap do |a|
             a.name = name if a.respond_to? :name=
             a.rule = rule if a.respond_to? :rule=
             a.rete = rete if a.respond_to? :rete=

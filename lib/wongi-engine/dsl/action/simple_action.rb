@@ -1,15 +1,16 @@
 module Wongi::Engine
   module DSL::Action
     class SimpleAction < Base
-      def initialize action = nil, *args, &block
+      def initialize action = nil, *args, **opts, &block
         @args = args
-        case action
-        when Class
-          @action = @deaction = @reaction = action.new *args, &block
-        when Hash
-          @action   = instance_or_proc action[:activate]
-          @deaction = instance_or_proc action[:deactivate]
-          @reaction = instance_or_proc action[:reactivate]
+        @opts = opts
+        case
+        when action.is_a?(Class)
+          @action = @deaction = @reaction = action.new *args, **opts, &block
+        when opts.any?
+          @action   = instance_or_proc opts[:activate]
+          @deaction = instance_or_proc opts[:deactivate]
+          @reaction = instance_or_proc opts[:reactivate]
         end
         @action ||= block
       end
