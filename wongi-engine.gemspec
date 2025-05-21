@@ -3,11 +3,11 @@ require File.expand_path('../lib/wongi-engine/version', __FILE__)
 
 module GemHelper
   def self.git?
-    File.exists?(".git")
+    File.exist?(".git")
   end
 
   def self.hg?
-    File.exists?(".hg")
+    File.exist?(".hg")
   end
 end
 
